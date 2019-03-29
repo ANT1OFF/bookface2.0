@@ -1,0 +1,139 @@
+version: '3.4'
+
+configs:
+  bf_config:
+    file: ./config.php
+  haproxy_config:
+    file: ./haproxy.cfg
+
+
+services:
+  app:
+    image: mcnutty/drift2.0:latest
+    environment:
+      # Port used by the HAProxy to reach the service.
+      - SERVICE_PORTS=80
+      - MEMCACHE_SERVER=memcache
+    deploy:
+      replicas: 5
+      restart_policy:
+       condition: on-failure
+       max_attempts: 3
+       window: 120s
+    #  placement:
+    #    constraints: [node.role != manager]
+    #### tester med dette av ####
+    networks:
+      - web
+    depends_on:
+      - memcache
+
+    configs:
+      - source: bf_config
+        target: /var/www/html/config.php
+    ports:
+      - "80"
+    networks:
+        - web
+    environment:
+      BF_MEMCACHE_SERVER: memcache
+
+  memcache:
+    image: memcached
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == worker]
+
+    networks:
+      - web
+
+  proxy:
+    image: dockercloud/haproxy
+    configs:
+      - source: haproxy_config
+        target: /usr/local/etc/haproxy/haproxy.cfg
+
+    depends_on:
+      - app
+      - cockroachdb-1
+      - cockroachdb-2
+      - cockroachdb-3
+    environment:
+      - BALANCE=leastconn
+      # Used to identify services.
+      - ADDITIONAL_SERVICES=project_dir:app
+      - STATS_AUTH=hmm:hmm
+      - MODE=http
+      - STATS_PORT=1936
+    volumes:
+      # the HAProxy will use the docker.sock to find the
+      # services that it should load balance.
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    ports:
+      # The internal used by the HAProxy is 80
+      - 80:80
+      - 9000:1936  #stats
+    networks:
+      - web
+    deploy:
+      # The HAProxy will run on all of the managers
+      restart_policy:
+       condition: on-failure
+       max_attempts: 3
+       window: 120s
+      mode: global
+      placement:
+        constraints: [node.role == manager]
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8989:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - web
+
+  cockroachdb-1:
+     image: cockroachdb/cockroach:v2.1.6
+     command: start --join=cockroachdb-1:26257,cockroachdb-2:26257,cockroachdb-3:26257 --cache=.25 --max-sql-memory=.25 --logtostderr --insecure
+     ports:
+       - "8082:8080"
+     networks:
+       - web
+     deploy:
+      replicas: 1
+     volumes:
+           - cockroachdb-1:/cockroach/cockroach-data
+
+  cockroachdb-2:
+     image: cockroachdb/cockroach:v2.1.6
+     command: start --join=cockroachdb-1:26257,cockroachdb-2:26257,cockroachdb-3:26257 --cache=.25 --max-sql-memory=.25 --logtostderr --insecure
+     networks:
+       - web
+     deploy:
+      replicas: 1
+     volumes:
+           - cockroachdb-2:/cockroach/cockroach-data
+
+  cockroachdb-3:
+     image: cockroachdb/cockroach:v2.1.6
+     command: start --join=cockroachdb-1:26257,cockroachdb-2:26257,cockroachdb-3:26257 --cache=.25 --max-sql-memory=.25 --logtostderr --insecure
+     networks:
+       - web
+     deploy:
+      replicas: 1
+     volumes:
+           - cockroachdb-3:/cockroach/cockroach-data
+
+volumes:
+  cockroachdb-1: {}
+  cockroachdb-2: {}
+  cockroachdb-3: {}
+
+networks:
+  web:
+    driver: overlay
