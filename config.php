@@ -1,5 +1,5 @@
 <?php
-$dbhost = "roach_db-proxy";
+$dbhost = "bf_db-proxy";
 $dbport = "26257";
 $db = "bf";
 $dbuser = "bfuser";
