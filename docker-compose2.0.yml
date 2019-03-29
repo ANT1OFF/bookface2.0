@@ -46,7 +46,7 @@ services:
     networks:
       - web
 
-proxy:
+  proxy:
     image: dockercloud/haproxy
     depends_on:
       - app
@@ -77,7 +77,7 @@ proxy:
       placement:
         constraints: [node.role == manager]
 
-db-proxy:
+  db-proxy:
     image: haproxy:alpine # The official Traefik docker image
 
     configs:
@@ -89,8 +89,6 @@ db-proxy:
 
     deploy:
       replicas: 2
-
-
 
   visualizer:
     image: dockersamples/visualizer:stable
