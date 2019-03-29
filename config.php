@@ -8,6 +8,6 @@ $webhost = '10.212.136.246';
 $weburl = 'http://' . $webhost ;
 $frontpage_limit = 500;
 $memcache_enabled_pictures = 1;
-$memcache_server = getenv("MEMCACHE_SERVER");
+$memcache_server = "bf_memcache";
 $memcache_enabled = 1;
 ?>
