@@ -3,8 +3,8 @@ version: '3.4'
 configs:
   bf_config:
     file: ./config.php
-  haproxy_config:
-    file: ./haproxy.cfg
+  #haproxy_config:
+  #  file: ./haproxy.cfg
 
 
 services:
@@ -31,8 +31,6 @@ services:
     configs:
       - source: bf_config
         target: /var/www/html/config.php
-    ports:
-      - "80"
     networks:
         - web
     environment:
