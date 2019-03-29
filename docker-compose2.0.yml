@@ -50,9 +50,9 @@ services:
 
   proxy:
     image: dockercloud/haproxy
-    configs:
-      - source: haproxy_config
-        target: /usr/local/etc/haproxy/haproxy.cfg
+  #  configs:
+  #    - source: haproxy_config
+  #      target: /usr/local/etc/haproxy/haproxy.cfg
 
     depends_on:
       - app
