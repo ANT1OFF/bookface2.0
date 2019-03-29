@@ -3,8 +3,8 @@ version: '3.4'
 configs:
   bf_config:
     file: ./config.php
-  #haproxy_config:
-  #  file: ./haproxy.cfg
+  haproxy_config:
+    file: ./haproxy.cfg
 
 
 services:
@@ -46,17 +46,10 @@ services:
     networks:
       - web
 
-  proxy:
+proxy:
     image: dockercloud/haproxy
-  #  configs:
-  #    - source: haproxy_config
-  #      target: /usr/local/etc/haproxy/haproxy.cfg
-
     depends_on:
       - app
-      - cockroachdb-1
-      - cockroachdb-2
-      - cockroachdb-3
     environment:
       - BALANCE=leastconn
       # Used to identify services.
@@ -83,6 +76,22 @@ services:
       mode: global
       placement:
         constraints: [node.role == manager]
+
+db-proxy:
+    image: haproxy:alpine # The official Traefik docker image
+
+    configs:
+      - source: haproxy_config
+        target: /usr/local/etc/haproxy/haproxy.cfg
+
+    networks:
+      - web
+
+    deploy:
+      replicas: 2
+
+
+
   visualizer:
     image: dockersamples/visualizer:stable
     ports:
