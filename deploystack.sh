@@ -9,7 +9,7 @@ CREATE table posts ( postID INT PRIMARY KEY DEFAULT unique_rowid(), userID INT, 
 CREATE table comments ( commentID INT PRIMARY KEY DEFAULT unique_rowid(), postID INT, userID INT, text STRING(300),  postDate TIMESTAMP DEFAULT NOW());'
 
 sudo docker stack deploy -c=/home/ubuntu/bookface2.0/docker-compose2.0.yml bf;
-sleep(5)
+sleep 5
 echo "Start"
 docker run -it --rm --network=bf_web cockroachdb/cockroach:v2.1.6 init --host=cockroachdb-1 --insecure
 docker exec -it --network=bf_web cockroachdb/cockroach:v2.1.6 sql --host=cockroachdb-1 --insecure -e "CREATE DATABASE bf;
