@@ -10,6 +10,8 @@ configs:
 services:
   app:
     image: mcnutty/drift2.0:latest
+    volumes:
+      - /images:/var/www/html/images
     environment:
       # Port used by the HAProxy to reach the service.
       - SERVICE_PORTS=80
@@ -29,7 +31,7 @@ services:
       - memcache
     ports:
       - 80:80
-      
+
     configs:
       - source: bf_config
         target: /var/www/html/config.php
@@ -47,37 +49,6 @@ services:
 
     networks:
       - web
-
-#      proxy:
-#        image: dockercloud/haproxy
-#        depends_on:
-#      - app
-#      environment:
-#      - BALANCE=leastconn
-#      # Used to identify services.
-#      - ADDITIONAL_SERVICES=project_dir:app
-#      - STATS_AUTH=hmm:hmm
-#      - MODE=http
-#      - STATS_PORT=1936
-#      volumes:
-#      # the HAProxy will use the docker.sock to find the
-#      # services that it should load balance.
-#      - "/var/run/docker.sock:/var/run/docker.sock"
-#    ports:
-#      # The internal used by the HAProxy is 80
-#      - 80:80
-#      - 9000:1936  #stats
-#    networks:
-#      - web
-#    deploy:
-#      # The HAProxy will run on all of the managers
-#      restart_policy:
-#       condition: on-failure
-#       max_attempts: 3
-#       window: 120s
-#      mode: global
-#      placement:
-#        constraints: [node.role == manager]
 
   db-proxy:
     image: haproxy:alpine # The official Traefik docker image
@@ -140,6 +111,7 @@ volumes:
   cockroachdb-1: {}
   cockroachdb-2: {}
   cockroachdb-3: {}
+
 
 networks:
   web:
