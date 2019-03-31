@@ -84,8 +84,8 @@ services:
        - web
      deploy:
       replicas: 1
-     volumes:
-           - cockroachdb-1:/cockroach/cockroach-data
+#     volumes:
+#           - cockroachdb-1:/cockroach/cockroach-data
 
   cockroachdb-2:
      image: cockroachdb/cockroach:v2.1.6
@@ -94,8 +94,8 @@ services:
        - web
      deploy:
       replicas: 1
-     volumes:
-           - cockroachdb-2:/cockroach/cockroach-data
+#     volumes:
+#           - cockroachdb-2:/cockroach/cockroach-data
 
   cockroachdb-3:
      image: cockroachdb/cockroach:v2.1.6
@@ -104,8 +104,8 @@ services:
        - web
      deploy:
       replicas: 1
-     volumes:
-           - cockroachdb-3:/cockroach/cockroach-data
+#     volumes:
+#           - cockroachdb-3:/cockroach/cockroach-data
 
 volumes:
   cockroachdb-1: {}
