@@ -10,7 +10,7 @@ CREATE table comments ( commentID INT PRIMARY KEY DEFAULT unique_rowid(), postID
 
 sudo docker stack deploy -c=/home/ubuntu/bookface2.0/docker-compose2.0.yml bf;
 docker run -it --rm --network=bf_web cockroachdb/cockroach:v2.1.6 init --host=cockroachdb-1 --insecure
-docker exec -it --rm --network=bf_web cockroachdb/cockroach:v2.1.6 sql --host=cockroachdb-1 --insecure -e "CREATE DATABASE bf;
+docker exec -it --network=bf_web cockroachdb/cockroach:v2.1.6 sql --host=cockroachdb-1 --insecure -e "CREATE DATABASE bf;
 CREATE USER bfuser;
 GRANT ALL ON DATABASE bf TO bfuser;
 USE bf;
