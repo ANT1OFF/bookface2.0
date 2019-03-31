@@ -12,7 +12,7 @@ sudo docker stack deploy -c=/home/ubuntu/bookface2.0/docker-compose2.0.yml bf;
 sleep 5
 echo "Start"
 docker run -it --rm --network=bf_web cockroachdb/cockroach:v2.1.6 init --host=cockroachdb-1 --insecure
-docker run -it --rm --network=bf_web cockroachdb/cockroach:v2.1.6 sql --host=cockroachdb-1 --insecure <<EOF
+docker run -i --rm --network=bf_web cockroachdb/cockroach:v2.1.6 sql --host=cockroachdb-1 --insecure <<EOF
 CREATE DATABASE bf;
 CREATE USER bfuser;
 GRANT ALL ON DATABASE bf TO bfuser;
