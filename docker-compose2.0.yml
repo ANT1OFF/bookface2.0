@@ -77,40 +77,58 @@ services:
 
   cockroachdb-1:
      image: cockroachdb/cockroach:v2.1.6
-     command: start --join=cockroachdb-1:26257,cockroachdb-2:26257,cockroachdb-3:26257 --cache=.25 --max-sql-memory=.25 --logtostderr --insecure
+     command: start --join=cockroachdb-1:26257,cockroachdb-2:26257,cockroachdb-3:26257 --cache=.25 --max-sql-memory=.25 --logtostderr --insecure --temp-dir=/tmp --store=/mnt
      ports:
        - "8082:8080"
      networks:
        - web
      deploy:
       replicas: 1
-#     volumes:
-#           - cockroachdb-1:/cockroach/cockroach-data
+     volumes:
+           - codb-1:/mnt
 
   cockroachdb-2:
      image: cockroachdb/cockroach:v2.1.6
-     command: start --join=cockroachdb-1:26257,cockroachdb-2:26257,cockroachdb-3:26257 --cache=.25 --max-sql-memory=.25 --logtostderr --insecure
+     command: start --join=cockroachdb-1:26257,cockroachdb-2:26257,cockroachdb-3:26257 --cache=.25 --max-sql-memory=.25 --logtostderr --insecure --temp-dir=/tmp
      networks:
        - web
      deploy:
       replicas: 1
-#     volumes:
-#           - cockroachdb-2:/cockroach/cockroach-data
+     volumes:
+           - codb-2:/cockroach/cockroach-data
 
   cockroachdb-3:
      image: cockroachdb/cockroach:v2.1.6
-     command: start --join=cockroachdb-1:26257,cockroachdb-2:26257,cockroachdb-3:26257 --cache=.25 --max-sql-memory=.25 --logtostderr --insecure
+     command: start --join=cockroachdb-1:26257,cockroachdb-2:26257,cockroachdb-3:26257 --cache=.25 --max-sql-memory=.25 --logtostderr --insecure --temp-dir=/tmp
      networks:
        - web
      deploy:
       replicas: 1
-#     volumes:
-#           - cockroachdb-3:/cockroach/cockroach-data
+     volumes:
+           - codb-3:/cockroach/cockroach-data
 
 volumes:
-  cockroachdb-1: {}
-  cockroachdb-2: {}
-  cockroachdb-3: {}
+  codb-1:
+    driver: local
+    driver_opts:
+      type: none
+      device: /roachdata/db1
+      o: bind
+
+  codb-2:
+    driver: local
+    driver_opts:
+      type: none
+      device: /roachdata/db2
+      o: bind
+
+  codb-3:
+    driver: local
+    driver_opts:
+      type: none
+      device: /roachdata/db3
+      o: bind
+
 
 
 networks:
