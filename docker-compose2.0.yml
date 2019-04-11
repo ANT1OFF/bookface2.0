@@ -83,6 +83,8 @@ services:
      networks:
        - web
      deploy:
+      placement:
+        constraints: [node.role == worker]
       replicas: 1
      volumes:
            - codb-1:/mnt
@@ -93,6 +95,8 @@ services:
      networks:
        - web
      deploy:
+      placement:
+        constraints: [node.role == worker]
       replicas: 1
      volumes:
            - codb-2:/cockroach/cockroach-data
@@ -103,6 +107,8 @@ services:
      networks:
        - web
      deploy:
+      placement:
+        constraints: [node.role == worker]        
       replicas: 1
      volumes:
            - codb-3:/cockroach/cockroach-data
