@@ -108,10 +108,11 @@ services:
        - web
      deploy:
       placement:
-        constraints: [node.role == worker]        
+        constraints: [node.role == worker]
       replicas: 1
      volumes:
            - codb-3:/cockroach/cockroach-data
+           
 
 volumes:
   codb-1:
