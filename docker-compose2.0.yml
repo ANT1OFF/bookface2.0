@@ -61,7 +61,7 @@ services:
       - web
 
     deploy:
-      replicas: 2
+      mode: global
 
   visualizer:
     image: dockersamples/visualizer:stable
