@@ -119,12 +119,6 @@ volumes:
     driver: sapk/plugin-gluster
     driver_opts:
       voluri: "192.168.129.25:db3"
-#  codb-1:
-#    driver: local
-#    driver_opts:
-#      type: none
-#      device: /roachdata/db1
-#      o: bind
 
   codb-2:
     driver: local
@@ -140,7 +134,12 @@ volumes:
       device: /roachdata/db3
       o: bind
 
-
+#  codb-1:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      device: /roachdata/db1
+#      o: bind
 
 networks:
   web:
