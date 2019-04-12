@@ -114,10 +114,10 @@ services:
            - codb-3:/cockroach/cockroach-data
 
 volumes:
-  codb-3:
-    driver: sapk/plugin-gluster
-    driver_opts:
-      voluri: "192.168.129.25:db3"
+#  codb-3:
+#    driver: sapk/plugin-gluster
+#    driver_opts:
+#      voluri: "192.168.129.25:db3"
 
   codb-2:
     driver: local
@@ -139,11 +139,11 @@ volumes:
 #      type: none
 #      device: /roachdata/db3
 #      o: bind
-#  codb-3:
-#    driver: glusterfs
-#    driver_opts:
-#      servers: 192.168.128.228,192.168.128.168,192.168.129.25
-#    name: "db3"
+  codb-3:
+    driver: glusterfs
+    driver_opts:
+      servers: 192.168.128.228,192.168.128.168,192.168.129.25
+    name: "db3"
 
 networks:
   web:
