@@ -112,7 +112,6 @@ services:
       replicas: 1
      volumes:
            - codb-3:/cockroach/cockroach-data
-192.168.129.25:db3
 
 volumes:
   codb-1:
