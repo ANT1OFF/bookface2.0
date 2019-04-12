@@ -112,15 +112,19 @@ services:
       replicas: 1
      volumes:
            - codb-3:/cockroach/cockroach-data
-           
+192.168.129.25:db3
 
 volumes:
   codb-1:
-    driver: local
+    driver: sapk/plugin-gluster
     driver_opts:
-      type: none
-      device: /roachdata/db1
-      o: bind
+      voluri: "192.168.129.25:db3"
+#  codb-1:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      device: /roachdata/db1
+#      o: bind
 
   codb-2:
     driver: local
