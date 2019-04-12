@@ -44,8 +44,6 @@ services:
     image: memcached
     deploy:
       replicas: 1
-      placement:
-        constraints: [node.role == worker]
 
     networks:
       - web
@@ -70,8 +68,6 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     deploy:
-      placement:
-        constraints: [node.role == manager]
     networks:
       - web
 
@@ -83,8 +79,6 @@ services:
      networks:
        - web
      deploy:
-      placement:
-        constraints: [node.role == worker]
       replicas: 1
      volumes:
            - codb-1:/mnt
@@ -95,8 +89,6 @@ services:
      networks:
        - web
      deploy:
-      placement:
-        constraints: [node.role == worker]
       replicas: 1
      volumes:
            - codb-2:/cockroach/cockroach-data
@@ -107,8 +99,6 @@ services:
      networks:
        - web
      deploy:
-      placement:
-        constraints: [node.role == worker]
       replicas: 1
      volumes:
            - codb-3:/cockroach/cockroach-data
